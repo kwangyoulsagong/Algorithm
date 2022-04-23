@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+int main() {
+	int t;
+	cin >> t;
+	int k, n;
+	int a[15][15];
+
+	for (int i = 0; i < t; i++) {
+		cin >> k;
+		cin >> n;
+		for (int j = 0; j <= k; j++) {
+			for (int l = 1; l <= n; l++) {
+				if (j == 0) {
+					a[0][l] = l;
+				}
+				else if (l == 1) {
+					a[j][l] = 1;
+				}
+				else
+					a[j][l]= a[j][l - 1]+a[j-1][l];
+			}
+		}
+		cout << a[k][n]<<"\n";
+	}
+	
+
+	
+}
