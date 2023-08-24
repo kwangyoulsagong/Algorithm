@@ -1,3 +1,6 @@
+//O(n^2) 복잡도
+
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -28,4 +31,44 @@ int main() {
 
 	}
 	cout << minimum_dist << endl;
+}//책풀이
+
+
+
+
+
+//내 풀이
+
+#include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+double distance(double x1, double x2, double y1, double y2){
+    double result = sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+    return result;
 }
+
+int main(){
+    int n;
+    cin>>n;
+    double minimum = 100000000;
+    vector<double> x(n),y(n);
+    for(int i = 0; i<n; i++){
+        cin>>x[i]>>y[i];
+    }
+    
+    for(int i =0; i<n; i++){
+        for(int j= i+1; j<n; j++){
+            double dist_i_j=distance(x[i], x[j], y[i], y[j]);
+            
+            if(dist_i_j<minimum){
+                minimum=dist_i_j;
+            }
+        }
+    }
+    
+    cout<<minimum;
+}
+
