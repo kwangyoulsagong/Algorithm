@@ -1,0 +1,12 @@
+const fs = require("fs");
+const file = process.platform === "linux" ? "dev/stdin" : "./example.txt";
+const inputData = fs.readFileSync(file).toString().split("\n");
+const a = Number(inputData[0]);
+const b = Number(inputData[1]);
+const first = b % 10;
+const second = Math.floor((b % 100) / 10);
+const third = Math.floor(b / 100);
+console.log(a * first);
+console.log(a * second);
+console.log(a * third);
+console.log(a * b);
