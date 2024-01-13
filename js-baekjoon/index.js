@@ -1,34 +1,16 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "dev/stdin" : "./example.txt";
 let input = fs.readFileSync(file).toString().trim().split("\n");
-
-//버튼 A 5분 B 1분 C 10초
-//시간 T는 초단위
-//최소 버튼 동작
-//젤 큰 초 부터 확인 cnt++ 그리고 시간 만큼 빼줌
-let T = Number(input[0]);
-const a = 60 * 5;
-const b = 60 * 1;
-const c = 10;
-let cnt1 = 0;
-let cnt2 = 0;
-let cnt3 = 0;
-while (true) {
-  if (T >= a) {
-    T = T - a;
-    cnt1++;
-  } else if (T >= b) {
-    T = T - b;
-    cnt2++;
-  } else if (T >= c) {
-    T = T - c;
-    cnt3++;
-  } else {
-    break;
-  }
+//타로 잡화점에서 물건을 사
+//잡화점이 가지고있는 잔돈 500, 100, 50 , 10 5 1
+// 거스름돈 개수 가장 적게 줌
+// 카운터에서 1000엔 지패를 한장냈을 떄 받은 잔돈에 포함된 잔돈 개수 1000-잔돈
+// 최선의 선택해야하기 때문에 큰잔돈부터 판단 그리디 알고리즘
+let payMoney = 1000 - Number(input[0]);
+let exChangeMoneyCOunt = 0;
+const exchangeMoney = [500, 100, 50, 10, 5, 1];
+for (let i = 0; i < exchangeMoney.length; i++) {
+  exChangeMoneyCOunt += Math.floor(payMoney / exchangeMoney[i]);
+  payMoney %= exchangeMoney[i]; // 잔돈을 줄임
 }
-if (T != 0) {
-  console.log(-1);
-} else {
-  console.log(`${cnt1} ${cnt2} ${cnt3}`);
-}
+console.log(exChangeMoneyCOunt);
