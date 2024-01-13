@@ -5,6 +5,7 @@ let input = fs.readFileSync(file).toString().trim().split("\n");
 //버튼 A 5분 B 1분 C 10초
 //시간 T는 초단위
 //최소 버튼 동작
+//최선의 선택 그리디 문제
 //젤 큰 초 부터 확인 cnt++ 그리고 시간 만큼 빼줌
 let T = Number(input[0]);
 const a = 60 * 5;

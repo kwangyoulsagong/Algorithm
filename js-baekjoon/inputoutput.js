@@ -1,3 +1,7 @@
+// const fs = require("fs");
+// const file = process.platform === "linux" ? "dev/stdin" : "./example.txt";
+// let input = fs.readFileSync(file).toString().trim().split("\n");
+
 // //한줄 입력받을떄
 // var input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
 // var a = parseInt(input[0]);
