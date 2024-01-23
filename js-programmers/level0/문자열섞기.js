@@ -1,0 +1,1 @@
+ return [...str1].map((x, idx)=> x+str2[idx]).join("");
