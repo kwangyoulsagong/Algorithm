@@ -1,98 +1,19 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n, m] = input.shift().split(" ").map(Number);
-const board = [];
-for (let i = 0; i < n; i++) {
-  board.push(input.shift().split(" ").map(Number));
-}
-const dx = [0, 0, 0, -1, 1];
-const dy = [0, 1, -1, 0, 0];
-const visit = Array.from({ length: n }, () =>
-  Array.from({ length: n }, () => [])
-);
-const horse_info = Array.from({ length: m + 1 }, () => []);
+//국가는 여러 지방의 예산요청을 심사하여 국가의 예산을 분배하는 것이다. 국가예산의 총액은 미리 정해짐 그래서 모든 예산요청을 배정해 주기 어려움
+//정해진 총액 이하에서 가능한 한 최대의 총 예산을 선정
+//1.모든 요청이 배정될 수 있는 경우 요청한 금액을 그대로 배정
+//2.모든 요청이 배정될 수 없는 경우에는 특정한 정수 상한액을 계산하여 그 이상인 예산요청에는 모두 상한액을 배정한다. 상한액 이하의 예산 요청에 대해서는 그대로 요청
 
-for (let i = 1; i <= m; i++) {
-  const [r, c, dir] = input.shift().split(" ").map(Number);
-  horse_info[i] = [i, r - 1, c - 1, dir];
-  visit[r - 1][c - 1].push(i);
-}
+//ex 전체 국가 예산 485
+//4개 지방 예산요청 각각 120, 110, 140, 150
+//이 경우, 상한액을 127로 잡으면 각각 120, 110, 127, 127
+// 배정 하고 그 합이 484로 가능한 최대가 됨
 
-function bottomHorse(num, r, c) {
-  const state = visit[r][c];
-  return state[0] === num;
-}
-
-function reverse_dir(direction) {
-  if (direction === 1) return 2;
-  if (direction === 2) return 1;
-  if (direction === 3) return 4;
-  return 3;
-}
-
-function blueBoard(r, c, dir) {
-  const bdir = reverse_dir(dir);
-  const bx = r + dx[bdir];
-  const by = c + dy[bdir];
-  if (bx < 0 || by < 0 || bx >= n || by >= n || board[bx][by] === 2) {
-    return true;
-  }
-  return false;
-}
-
-function move(r, c, dir) {
-  let nx = r + dx[dir];
-  let ny = c + dy[dir];
-  if (nx < 0 || ny < 0 || nx >= n || ny >= n || board[nx][ny] === 2) {
-    if (blueBoard(r, c, dir)) return [r, c, reverse_dir(dir)];
-    else return move(r, c, reverse_dir(dir));
-  }
-  if (board[nx][ny] === 1) {
-    const revHorses = visit[r][c].reverse();
-    for (const value of revHorses) {
-      visit[nx][ny].push(value);
-      const [hNum, , , d] = horse_info[value];
-      horse_info[value] = [hNum, nx, ny, d];
-    }
-    visit[r][c] = [];
-  } else if (board[nx][ny] === 0) {
-    for (const value of visit[r][c]) {
-      visit[nx][ny].push(value);
-      const [hNum, , , d] = horse_info[value];
-      horse_info[value] = [hNum, nx, ny, d];
-    }
-    visit[r][c] = [];
-  }
-  return [nx, ny, dir];
-}
-
-function dfs() {
-  for (let i = 1; i <= m; i++) {
-    const [horse_num, r, c, dir] = horse_info[i];
-    if (!bottomHorse(horse_num, r, c)) continue;
-    const [nx, ny, ndir] = move(r, c, dir);
-    horse_info[horse_num] = [horse_num, nx, ny, ndir];
-  }
-}
-
-function is_finish() {
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n; j++) {
-      if (visit[i][j].length >= 4) return true;
-    }
-  }
-  return false;
-}
-
-let answer = -1;
-let time = 1;
-while (time <= 1000) {
-  dfs();
-  if (is_finish()) {
-    answer = time;
-    break;
-  }
-  time++;
-}
-console.log(answer);
+const l = input[0];
+console.log(l);
+const k = input[1].split(" ").map(Number);
+const total = input[2];
+const sum = k.reduce((acc, i) => (acc += i));
+console.log(sum);
