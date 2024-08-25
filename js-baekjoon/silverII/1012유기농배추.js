@@ -54,3 +54,66 @@ for (let start = 0; start < t; start++) {
   }
   console.log(worm);
 }
+const fs = require("fs");
+const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
+const input = fs.readFileSync(file).toString().trim().split("\n");
+// 배충 흰 지렁이 구매
+// 이 지렁이는 배추 근처에 서식 하며 해충을 먹음
+// 어떤 배추에 이 지렁이가 한마리라도 살고 있으면 인접한 다른 배추로 이동 가능 그래서 그 배추도 보호 받음
+// 한 배추의 상하좌우 네 방향에 다른 배추가 위치한 경우 서로 인접하다
+// 배추를 군대 군대 심어 놓음
+// 배추들이 모여있는 곳에는 배추 흰지렁이가 한마리만 있으면 되므로 서로 인접해 있는 배추들이 몇 군대에 퍼져 있는지 조사하면 총 몇마리의 지렁이가 필요한지 알 수 있다
+// 0 은 배추가 심어져 있지 않은 땅 1은 배추가 심어져 있는 땅
+
+const dfs = (startx, starty, w, h, graph, visited) => {
+  const dx = [-1, 0, 1, 0];
+  const dy = [0, 1, 0, -1];
+
+  visited[startx][starty] = 1;
+
+  for (let i = 0; i < 4; i++) {
+    const x = startx + dx[i];
+    const y = starty + dy[i];
+    if (
+      x >= 0 &&
+      y >= 0 &&
+      x < w &&
+      y < h &&
+      graph[x][y] === 1 &&
+      visited[x][y] === 0
+    ) {
+      dfs(x, y, w, h, graph, visited);
+    }
+  }
+};
+
+const [t] = input.shift().split(" ").map(Number);
+for (let i = 0; i < t; i++) {
+  const [w, h, k] = input.shift().split(" ");
+  const graph = Array.from({ length: w }, () =>
+    Array.from(
+      {
+        length: h,
+      },
+      () => 0
+    )
+  );
+  let worm = 0;
+  const visited = Array.from({ length: w }, () =>
+    Array.from({ length: h }, () => 0)
+  );
+  for (let i = 0; i < k; i++) {
+    const [a, b] = input.shift().split(" ").map(Number);
+    graph[a][b] = 1;
+  }
+
+  for (let x = 0; x < w; x++) {
+    for (let y = 0; y < h; y++) {
+      if (graph[x][y] == 1 && visited[x][y] == 0) {
+        dfs(x, y, w, h, graph, visited);
+        worm++;
+      }
+    }
+  }
+  console.log(worm);
+}
