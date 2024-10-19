@@ -3,7 +3,7 @@ const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
 
 function greedy(applicants) {
-  let pass = 1; // 서류 성적이 젤 높은애에 면접 순위가 기준 얘보다 낮으면 다 패스
+  let pass = 1; // 서류 성적이 젤 높은애에 면접 순위가 기준 얘보다 낮으면 다 패스 이래서 그리디
   let cur = applicants[0].interviewRank;
   for (let i = 0; i < applicants.length; i++) {
     if (cur > applicants[i].interviewRank) {
