@@ -12,6 +12,7 @@ const result = days[0]
 //   result.push([days[0][i], days[1][i]]);
 // }
 // result.sort((a, b) => a[1] - b[1]);
+console.log(result);
 
 let answer = 0;
 for (let i = 0; i < n; i++) {
