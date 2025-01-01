@@ -12,18 +12,11 @@
 let [n, m, k] = [5, 8, 3].map(Number);
 const arr = [2, 4, 5, 4, 6];
 arr.sort((a, b) => b - a);
+let count = 0;
+count = (m / (k + 1)) * k;
+count += m % (k + 1);
 
 let result = 0;
-while (m > 0) {
-  for (let i = 0; i < k; i++) {
-    if (m == 0) break;
-    result += arr[0];
-    m--;
-  }
-  if (m == 0) {
-    break;
-  }
-  result += arr[1];
-  m--;
-}
+result = count * arr[0];
+result += (m - count) * arr[1];
 console.log(result);
