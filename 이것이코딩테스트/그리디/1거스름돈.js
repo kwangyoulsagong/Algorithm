@@ -7,8 +7,8 @@
 let n = 1260;
 const coin = [500, 100, 50, 10];
 let count = 0;
-coin.forEach((value) => {
+for (let value of coin) {
   count += parseInt(n / value);
-  n %= value;
-});
+  n = n % value;
+}
 console.log(count);
