@@ -9,22 +9,21 @@
 
 //풀이 일단 오름차순으로 정렬하고 첫번째 인덱스 k번만큼 더하고 한번 더할때마다 m을 줄임 그리고 두번째 거 더하고 m을 줄이고 다시 k번만큼 큰수 더한다 반복 m이 0이 될때까지
 
-const n = 5;
-let m = 8;
-const k = 3;
-const numbers = [2, 4, 5, 4, 6];
-numbers.sort();
-const first = numbers[n - 1];
-const second = numbers[n - 2];
-let sum = 0;
-while (true) {
+let [n, m, k] = [5, 8, 3].map(Number);
+const arr = [2, 4, 5, 4, 6];
+arr.sort((a, b) => b - a);
+
+let result = 0;
+while (m > 0) {
   for (let i = 0; i < k; i++) {
     if (m == 0) break;
-    sum += first;
+    result += arr[0];
     m--;
   }
-  if (m == 0) break;
-  sum += second;
+  if (m == 0) {
+    break;
+  }
+  result += arr[1];
   m--;
 }
-console.log(sum);
+console.log(result);
