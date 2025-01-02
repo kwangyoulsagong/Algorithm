@@ -14,33 +14,3 @@
 //내 풀이
 let n = 25;
 const k = 3;
-
-let count = 0;
-while (n > 1) {
-  if (n % k == 0) {
-    n /= k;
-    count++;
-  } else {
-    n -= 1;
-    count++;
-  }
-}
-console.log(count);
-// 나은 풀이
-
-function solution(n, k) {
-  let result = 0;
-  while (true) {
-    const target = parseInt(n / k) * k;
-    result += n - target;
-    n = target;
-    if (n < k) {
-      break;
-    }
-    n = parseInt(n / k);
-    result += 1;
-  }
-  result += n - 1;
-  console.log(result);
-}
-solution(25, 3);
