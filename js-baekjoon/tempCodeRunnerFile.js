@@ -5,14 +5,17 @@ const str = input.shift();
 let count = 0;
 let min = Infinity;
 let max = 0;
-const findOdd = (str) => {
-  return [...str].reduce(
-    (count, digit) => count + (parseInt(digit) % 2 == 1 ? 1 : 0),
-    0
-  );
+const findOdd = (str, count) => {
+  for (let i = 0; i < str.length; i++) {
+    if (parseInt(str[i]) % 2 == 1) {
+      count++;
+    }
+  }
+
+  return count;
 };
 const slice = (str, count) => {
-  count += findOdd(str);
+  const values = findOdd(str, count);
 
   if (str.length >= 3) {
     for (let i = 1; i < str.length; i++) {
@@ -21,15 +24,15 @@ const slice = (str, count) => {
         const b = str.slice(i, j);
         const c = str.slice(j);
         const total = parseInt(a) + parseInt(b) + parseInt(c);
-        slice(total.toString(), count);
+        slice(total.toString(), values);
       }
     }
   } else if (str.length == 2) {
     const total = parseInt(str[0]) + parseInt(str[1]);
-    slice(total.toString(), count);
+    slice(total.toString(), values);
   } else {
-    min = Math.min(min, count);
-    max = Math.max(max, count);
+    min = Math.min(min, values);
+    max = Math.max(max, values);
   }
 };
 slice(str, count);
