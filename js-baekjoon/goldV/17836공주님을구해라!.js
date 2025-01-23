@@ -1,54 +1,50 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const values = input.shift().split(" ").map(Number);
-const n = values.shift();
-const m = values.shift();
+const [n, m, t] = input.shift().split(" ").map(Number);
 const map = input.map((v) => v.split(" ").map(Number));
-let t = values.shift();
-const dx = [0, 0, -1, 1];
-const dy = [1, -1, 0, 0];
 const visited = Array.from({ length: n }, () =>
   Array.from({ length: m }, () => Array(2).fill(false))
 );
-
-const queue = [[0, 0, 0]];
 visited[0][0][0] = true;
 
 const distance = Array.from({ length: n }, () =>
   Array.from({ length: m }, () => Array(2).fill(Infinity))
 );
 distance[0][0][0] = 0;
+const queue = [[0, 0, 0]];
+const dx = [0, 0, -1, 1];
+const dy = [1, -1, 0, 0];
 
 const bfs = () => {
   while (queue.length > 0) {
-    const [x, y, weapon] = queue.shift();
+    const [x, y, item] = queue.shift();
     for (let i = 0; i < 4; i++) {
       const newx = x + dx[i];
       const newy = y + dy[i];
-
       if (newx >= 0 && newy >= 0 && newx < n && newy < m) {
-        const cell = map[newx][newy];
-        const newWeapon = weapon || cell == 2 ? 1 : 0;
+        const value = map[newx][newy];
+        const newItem = item || value == 2 ? 1 : 0;
         if (
-          !visited[newx][newy][newWeapon] &&
-          (cell == 0 || cell == 2 || (weapon == 1 && cell == 1))
+          !visited[newx][newy][newItem] &&
+          (value == 0 || value == 2 || (value == 1 && item == 1))
         ) {
-          visited[newx][newy][newWeapon] = true;
-          distance[newx][newy][newWeapon] = distance[x][y][weapon] + 1;
-          queue.push([newx, newy, newWeapon]);
+          visited[newx][newy][newItem] = true;
+          distance[newx][newy][newItem] = distance[x][y][item] + 1;
+          queue.push([newx, newy, newItem]);
         }
       }
     }
   }
 };
-bfs();
 
+bfs();
 const resultWithoutWeapon = distance[n - 1][m - 1][0];
 const resultWithWeapon = distance[n - 1][m - 1][1];
-const result = Math.min(resultWithoutWeapon, resultWithWeapon);
-if (result <= t) {
-  console.log(result);
+const finalResult = Math.min(resultWithoutWeapon, resultWithWeapon);
+
+if (finalResult <= t) {
+  console.log(finalResult);
 } else {
   console.log("Fail");
 }
