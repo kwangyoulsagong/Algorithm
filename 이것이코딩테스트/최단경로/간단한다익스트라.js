@@ -17,59 +17,53 @@ let visited = Array.from({ length: n + 1 }, () => false);
 // 최단 거리 테이블을 모두 무한으로 초기화
 let distance = Array.from({ length: n + 1 }, () => Infinity);
 
-function solution(n, m, start, arr) {
-  for (const v of arr) {
-    // a -> b 로 가는 비용이 c
-    const [a, b, c] = v;
-    graph[a].push([b, c]);
+for (const v of arr) {
+  // a -> b 로 가는 비용이 c
+  const [a, b, c] = v;
+  graph[a].push([b, c]);
+}
+
+// 방문하지 않는 노드 중에서, 가장 최단 거리가 짧은 노드의 번호를 반환
+const get_smallest_node = () => {
+  let minValue = Infinity;
+  let index = 0;
+  for (let i in distance) {
+    if (!visited[i] && distance[i] < minValue) {
+      minValue = distance[i];
+      index = i;
+    }
   }
+  return index;
+};
 
-  // 방문하지 않는 노드 중에서, 가장 최단 거리가 짧은 노드의 번호를 반환
-  const get_smallest_node = () => {
-    let min_value = Infinity;
-    // 가장 최단 거리가 짧은 노드
-    let index = 0;
-    for (const i in distance) {
-      if (!visited[i] && distance[i] < min_value) {
-        min_value = distance[i];
-        index = i;
+const dijkstra = (start) => {
+  // 시작 노드 0을로 초기화
+  distance[start] = 0;
+  visited[start] = true;
+  for (const j of graph[start]) {
+    const [node, cost] = j;
+    distance[node] = cost;
+  }
+  // 시작 노드를 제외한 전체 노드에 대해 반복
+  for (let i = 0; i < n; i++) {
+    const now = get_smallest_node();
+    visited[now] = true;
+    for (const j of graph[now]) {
+      const [node, preCost] = j;
+      const cost = distance[now] + preCost;
+      if (cost < distance[node]) {
+        distance[node] = cost;
       }
     }
-    return index;
-  };
+  }
+};
+// 다익스트라 알고리즘 수행
+dijkstra(start);
 
-  const dijkstra = (start) => {
-    // 시작 노드 0을로 초기화
-    distance[start] = 0;
-    visited[start] = true;
-    for (const j of graph[start]) {
-      const [node, cost] = j;
-      distance[node] = cost;
-    }
-    // 시작 노드를 제외한 전체 노드에 대해 반복
-    for (let i = 0; i < n; i++) {
-      const now = get_smallest_node();
-      visited[now] = true;
-      // 현재 노드와 연결된 다른 노드를 확인
-      for (const j of graph[now]) {
-        const [node, preCost] = j;
-        const cost = distance[now] + preCost;
-        // 현재 노드를 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
-        if (cost < distance[node]) {
-          distance[node] = cost;
-        }
-      }
-    }
-  };
-  // 다익스트라 알고리즘 수행
-  dijkstra(start);
-
-  for (let i = 1; i <= n; i++) {
-    if (distance[i] === Infinity) {
-      console.log("INFINITY");
-    } else {
-      console.log(distance[i]);
-    }
+for (let i = 1; i <= n; i++) {
+  if (distance[i] === Infinity) {
+    console.log("INFINITY");
+  } else {
+    console.log(distance[i]);
   }
 }
-solution(n, m, start, arr);
