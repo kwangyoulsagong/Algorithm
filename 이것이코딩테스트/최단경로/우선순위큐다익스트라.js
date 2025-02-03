@@ -30,7 +30,6 @@ for (const value of arr) {
   const [a, b, c] = value;
   graph[a].push([b, c]);
 }
-
 const dijkstra = (start) => {
   const pq = new PriorityQueue();
   pq.enqueue(start, 0);
