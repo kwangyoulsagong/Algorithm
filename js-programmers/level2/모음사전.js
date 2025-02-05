@@ -9,3 +9,13 @@ function solution(word) {
 
   return result;
 }
+function solution(word) {
+  const vowels = ["A", "E", "I", "O", "U"];
+  let result = 0;
+
+  for (let i = 0; i < word.length; i++) {
+    result += vowels.indexOf(word[i]) * Math.floor(5 ** (5 - i) / 4) + 1;
+  }
+
+  return result;
+}
