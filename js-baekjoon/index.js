@@ -1,49 +1,59 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-
-const N = Number(input[0]);
-const lectures = input.slice(1).map((line) => line.split(" ").map(Number));
-
-lectures.sort((a, b) => (a[1] === b[1] ? a[2] - b[2] : a[1] - b[1]));
-
-const minHeap = [];
-const addToHeap = (endTime) => {
-  minHeap.push(endTime);
-  let i = minHeap.length - 1;
-  while (i > 0) {
-    const parent = Math.floor((i - 1) / 2);
-    if (minHeap[i] >= minHeap[parent]) break;
-    [minHeap[i], minHeap[parent]] = [minHeap[parent], minHeap[i]];
-    i = parent;
-  }
-};
-const popFromHeap = () => {
-  const min = minHeap[0];
-  const last = minHeap.pop();
-  if (minHeap.length === 0) return min;
-  minHeap[0] = last;
-  let i = 0;
-  while (true) {
-    const left = i * 2 + 1;
-    const right = i * 2 + 2;
-    let smallest = i;
-    if (left < minHeap.length && minHeap[left] < minHeap[smallest])
-      smallest = left;
-    if (right < minHeap.length && minHeap[right] < minHeap[smallest])
-      smallest = right;
-    if (smallest === i) break;
-    [minHeap[i], minHeap[smallest]] = [minHeap[smallest], minHeap[i]];
-    i = smallest;
-  }
-  return min;
-};
-
-for (const [num, start, end] of lectures) {
-  if (minHeap.length > 0 && minHeap[0] <= start) {
-    popFromHeap();
-  }
-  addToHeap(end);
+const arr = [];
+for (let i = 0; i < 5; i++) {
+  arr.push(input[i].split(" ").map(Number));
 }
+const [r, c] = input[5].split(" ").map(Number);
 
-console.log(minHeap.length);
+const bfs = (arr, r, c, apple, move) => {
+  const queue = [[r, c, apple, move]];
+  const dx = [-1, 0, 1, 0];
+  const dy = [0, -1, 0, 1];
+
+  // 방문한 위치를 기록할 배열
+  const visited = Array.from({ length: 5 }, () => Array(5).fill(false));
+  visited[r][c] = true;
+
+  while (queue.length > 0) {
+    const [x, y, apples, count] = queue.shift();
+
+    // 3번을 초과한 이동은 의미 없으므로 종료
+    if (count > 3) {
+      continue;
+    }
+    // 사과를 2개 이상 먹었다면 1을 반환
+    if (apples >= 2) {
+      return 1;
+    }
+
+    // 상, 하, 좌, 우로 탐색
+    for (let i = 0; i < 4; i++) {
+      const newx = x + dx[i];
+      const newy = y + dy[i];
+
+      // 새로운 위치가 유효하고, 방문하지 않은 칸이라면
+      if (
+        newx >= 0 &&
+        newy >= 0 &&
+        newx < 5 &&
+        newy < 5 &&
+        !visited[newx][newy] &&
+        arr[newx][newy] !== -1
+      ) {
+        visited[newx][newy] = true; // 방문 처리
+
+        // 사과가 있는 칸이라면
+        if (arr[newx][newy] === 1) {
+          queue.push([newx, newy, apples + 1, count + 1]);
+        } else {
+          queue.push([newx, newy, apples, count + 1]);
+        }
+      }
+    }
+  }
+  return 0;
+};
+
+console.log(bfs(arr, r, c, 0, 0));

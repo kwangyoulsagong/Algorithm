@@ -29,12 +29,14 @@ const dfs = (arr, r, c, apple, move) => {
       newy < 5 &&
       arr[newx][newy] != -1
     ) {
-      if (dfs(arr, newx, newy, apple + 1, move + 1)) {
-        return true;
-      }
-    } else {
-      if (dfs(arr, newx, newy, apple, move + 1)) {
-        return true;
+      if (arr[newx][newy] === 1) {
+        if (dfs(arr, newx, newy, apple + 1, move + 1)) {
+          return true;
+        }
+      } else {
+        if (dfs(arr, newx, newy, apple, move + 1)) {
+          return true;
+        }
       }
     }
   }
