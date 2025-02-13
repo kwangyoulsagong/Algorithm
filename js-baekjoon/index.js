@@ -1,12 +1,23 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input[0].split(" ").map(Number);
-const dp = Array(n + 1).fill(BigInt(0));
-dp[0] = BigInt(0);
-dp[1] = BigInt(1);
-for (let i = 2; i <= n; i++) {
-  dp[i] = dp[i - 2] + dp[i - 1];
-}
+const N = Number(input[0]);
+const lectures = input.slice(1).map((line) => line.split(" ").map(Number));
+const startTime = lectures.map((l) => l[1]).sort((a, b) => a - b);
+const endTime = lectures.map((l) => l[2]).sort((a, b) => a - b);
+let i = 0;
+let j = 0;
+let rooms = 0;
+let maxRooms = 0;
 
-console.log(dp[n].toString());
+while (i < N) {
+  if (startTime[i] >= endTime[j]) {
+    rooms--;
+    j++;
+  } else {
+    i++;
+    rooms++;
+  }
+  maxRooms = Math.max(maxRooms, rooms);
+}
+console.log(maxRooms);
