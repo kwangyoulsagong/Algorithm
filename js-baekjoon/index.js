@@ -1,19 +1,17 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n, m] = input.shift().split(" ").map(Number);
-const arr = input.map(Number);
-const dp = Array(m + 1).fill(10001);
-dp[0] = 0;
-for (let i = 0; i < n; i++) {
-  for (let j = arr[i]; j <= m; j++) {
-    if (dp[j - arr[i]] !== 10001) {
-      dp[j] = Math.min(dp[j], dp[j - arr[i]] + 1);
-    }
-  }
+const [n] = input[0].split(" ").map(Number);
+const [k] = input[1].split(" ").map(Number);
+const arr = input[2].split(" ").map(Number);
+arr.sort((a, b) => a - b);
+const depth = [];
+for (let i = 0; i < n - 1; i++) {
+  depth.push(arr[i + 1] - arr[i]);
 }
-if (dp[m] === 10001) {
-  console.log(-1);
-} else {
-  console.log(dp[m]);
+depth.sort((a, b) => a - b);
+let result = 0;
+for (let i = 0; i < n - k; i++) {
+  result += depth[i];
 }
+console.log(result);
