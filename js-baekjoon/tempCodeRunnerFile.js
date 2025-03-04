@@ -1,2 +1,1 @@
-
-        newy >= 0 &&
+dp[i] = Math.max(dp[i], dp[i - 1]);
