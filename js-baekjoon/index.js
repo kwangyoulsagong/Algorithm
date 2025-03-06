@@ -3,13 +3,24 @@ const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
 const [n] = input.shift().split(" ").map(Number);
 const arr = input.map((v) => v.split(" ").map(Number));
-arr.sort((a, b) => (a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]));
-let end = 0;
-let count = 0;
-for (let i = 0; i < n; i++) {
-  if (end <= arr[i][0]) {
-    count++;
-    end = arr[i][1];
+const startTime = arr.map((v) => v[1]).sort((a, b) => a - b);
+const endTime = arr.map((v) => v[2]).sort((a, b) => a - b);
+const findMaxRooms = (startTime, endTime) => {
+  let start = 0;
+  let end = 0;
+  let rooms = 0;
+  let maxRooms = 0;
+  while (start < endTime.length) {
+    if (startTime[start] >= endTime[end]) {
+      rooms--;
+      end++;
+    } else {
+      rooms++;
+      start++;
+    }
+    maxRooms = Math.max(maxRooms, rooms);
   }
-}
-console.log(count);
+  return maxRooms;
+};
+
+console.log(findMaxRooms(startTime, endTime));
