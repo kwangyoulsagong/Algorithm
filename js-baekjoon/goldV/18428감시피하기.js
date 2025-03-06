@@ -32,6 +32,9 @@ const checkSight = (arr) => {
 };
 const dfs = (cnt) => {
   if (cnt == 3) {
+    console.log("현재 장애물 배치:");
+    console.log(map.map((row) => row.join(" ")).join("\n"));
+    console.log("----------------");
     let result = checkSight(map.map((v) => [...v]));
     if (result) {
       flag = true;
