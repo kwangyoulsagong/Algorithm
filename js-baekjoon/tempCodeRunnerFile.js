@@ -1,31 +1,35 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n, m] = input.shift().split(" ").map(Number);
-const map = input.map((v) => v.split("").map(Number));
-const dx = [-1, 1, 0, 0];
-const dy = [0, 0, -1, 1];
-const visited = Array.from({ length: n }, () => Array(m).fill(false));
-const queue = [[0, 0]];
-visited[0][0] = true;
-while (queue.length > 0) {
-  const [x, y] = queue.shift();
-  for (let i = 0; i < 4; i++) {
-    const newx = x + dx[i];
-    const newy = y + dy[i];
-    if (
-      newx >= 0 &&
-      newy >= 0 &&
-      newx < n &&
-      newy < m &&
-      !visited[newx][newy] &&
-      map[newx][newy] != 0
-    ) {
-      map[newx][newy] = map[x][y] + 1;
-      queue.push([newx, newy]);
-      visited[newx][newy] = true;
+const [n] = input[0].split(" ").map(Number);
+const arr = input[1].split(" ").map(Number);
+arr.sort((a, b) => a - b);
+const findGoodNum = (num, i) => {
+  let start = i + 1;
+  let end = n - 1;
+  while (start <= end) {
+    const mid = Math.floor((start + end) / 2);
+    if (arr[mid] === num) {
+      return true;
+    } else if (arr[mid] < num) {
+      start = mid + 1;
+    } else {
+      end = mid - 1;
+    }
+  }
+  return false;
+};
+
+let count = 0;
+for (let i = 0; i < n; i++) {
+  const target = arr[i];
+  for (let j = 0; j < i; j++) {
+    const num = target - arr[j];
+    const result = findGoodNum(num, i);
+    if (result) {
+      count++;
+      break;
     }
   }
 }
-
-console.log(map[n - 1][m - 1]);
+console.log(count);
