@@ -1,25 +1,22 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input[0].split(" ").map(Number);
-const arr = input[1].split(" ").map(Number);
-arr.sort((a, b) => a - b);
-let start = 0;
-let end = n - 1;
-let min = Infinity;
-let x = 0;
-let y = 0;
-while (start < end) {
-  let sum = arr[start] + arr[end];
-  if (min > Math.abs(sum)) {
-    min = Math.abs(sum);
-    x = arr[start];
-    y = arr[end];
+const [n, k] = input.shift().split(" ").map(Number);
+const arr = input.map((v) => v.split(" ").map(Number));
+const dp = Array.from({ length: n + 1 }, () => Array(k + 1).fill(0));
+
+const findMaxWeight = (w, v, i) => {
+  for (let j = 1; j < k + 1; j++) {
+    if (j - w >= 0) {
+      dp[i][j] = Math.max(dp[i - 1][j - w] + v, dp[i - 1][j]);
+    } else {
+      dp[i][j] = dp[i - 1][j];
+    }
   }
-  if (sum < 0) {
-    start++;
-  } else {
-    end--;
-  }
+};
+
+for (let i = 1; i < n + 1; i++) {
+  const [w, v] = arr[i - 1];
+  findMaxWeight(w, v, i);
 }
-console.log(x, y);
+console.log(dp[n][k]);
