@@ -1,20 +1,33 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input.shift().split(" ").map(Number);
-findTheProfits = (n, arr) => {
-  let maxValue = 0;
-  let profits = 0;
-  for (let i = n - 1; i >= 0; i--) {
-    if (maxValue < arr[i]) maxValue = arr[i];
-    else if (maxValue > arr[i]) profits += maxValue - arr[i];
-  }
-  return profits;
-};
+const [p, m] = input.shift().split(" ").map(Number);
 
-for (let i = 0; i < n; i++) {
-  const [m] = input.shift().split(" ").map(Number);
-  const arr = input.shift().split(" ").map(Number);
-  const profits = findTheProfits(m, arr);
-  console.log(profits);
+const arr = input.map((v) => v.split(" ").map(String));
+
+const rooms = [];
+const checkRanking = (level) => {
+  for (let i = 0; i < rooms.length; i++) {
+    if (rooms[i].length < m) {
+      const check = rooms[i][0][0];
+      if (Math.abs(check - level) <= 10) {
+        return i;
+      }
+    }
+  }
+  return null;
+};
+for (let i = 0; i < p; i++) {
+  const [level, nickname] = arr[i];
+  const check = checkRanking(level);
+  if (check !== null) {
+    rooms[check].push([parseInt(level), nickname]);
+  } else {
+    rooms.push([[parseInt(level), nickname]]);
+  }
 }
+rooms.forEach((room) => {
+  room.sort((a, b) => a[1].localeCompare(b[1]));
+  console.log(room.length === m ? "Started!" : "Waiting!");
+  room.forEach((player) => console.log(player.join(" ")));
+});
