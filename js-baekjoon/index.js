@@ -1,22 +1,33 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input.shift().split(" ").map(Number);
-const arr = input.map((v) => v.split(" ").map(Number));
+const [game, win] = input[0].split(" ").map(Number);
 
-const timeSwapping = [];
-
-for (const value of arr) {
-  const [start, end] = value;
-  timeSwapping.push([start, 1]);
-  timeSwapping.push([end, -1]);
+function binarySearch(start, end, game, win, percent) {
+  let result = 0;
+  while (start <= end) {
+    const mid = Math.floor((start + end) / 2);
+    const check = Math.floor((100 * (win + mid)) / (game + mid));
+    if (check > percent) {
+      result = mid;
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+  return result;
 }
 
-timeSwapping.sort((a, b) => (a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]));
-let rooms = 0;
-let maxRooms = 0;
-for (const [_, value] of timeSwapping) {
-  rooms += value;
-  maxRooms = Math.max(maxRooms, rooms);
+function Solution(game, win) {
+  const percent = Math.floor((100 * win) / game);
+  let start = 0;
+  let end = game;
+  if (percent >= 99) {
+    console.log(-1);
+  } else {
+    const answer = binarySearch(start, end, game, win, percent);
+    console.log(answer);
+  }
 }
-console.log(maxRooms);
+
+Solution(game, win);
