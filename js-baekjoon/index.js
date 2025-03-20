@@ -1,19 +1,22 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input[0].split(" ").map(Number);
-const [k] = input[1].split(" ").map(Number);
-const arr = input[2].split(" ").map(Number);
-arr.sort((a, b) => a - b);
+const [n] = input.shift().split(" ").map(Number);
+const arr = input.map((v) => v.split(" ").map(Number));
 
-const differenceArr = [];
-for (let i = 0; i < n - 1; i++) {
-  const value = arr[i + 1] - arr[i];
-  differenceArr.push(value);
+const timeSwapping = [];
+
+for (const value of arr) {
+  const [start, end] = value;
+  timeSwapping.push([start, 1]);
+  timeSwapping.push([end, -1]);
 }
-differenceArr.sort((a, b) => a - b);
-let sum = 0;
-for (let i = 0; i < n - k; i++) {
-  sum += differenceArr[i];
+
+timeSwapping.sort((a, b) => (a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]));
+let rooms = 0;
+let maxRooms = 0;
+for (const [_, value] of timeSwapping) {
+  rooms += value;
+  maxRooms = Math.max(maxRooms, rooms);
 }
-console.log(sum);
+console.log(maxRooms);
