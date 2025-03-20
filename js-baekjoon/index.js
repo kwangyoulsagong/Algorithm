@@ -1,27 +1,19 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n] = input.shift(" ").split(" ").map(Number);
-const arr = input.map((v) => v.split(" ").map(Number));
-const startTime = arr.map((v) => v[1]).sort((a, b) => a - b);
-const endTime = arr.map((v) => v[2]).sort((a, b) => a - b);
+const [n] = input[0].split(" ").map(Number);
+const [k] = input[1].split(" ").map(Number);
+const arr = input[2].split(" ").map(Number);
+arr.sort((a, b) => a - b);
 
-function solution(startTime, endTime, n) {
-  let start = 0;
-  let end = 0;
-  let count = 0;
-  let result = 0;
-  while (start < n) {
-    if (startTime[start] >= endTime[end]) {
-      count--;
-      end++;
-    } else {
-      start++;
-      count++;
-    }
-    result = Math.max(result, count);
-  }
-  console.log(result);
+const differenceArr = [];
+for (let i = 0; i < n - 1; i++) {
+  const value = arr[i + 1] - arr[i];
+  differenceArr.push(value);
 }
-
-solution(startTime, endTime, n);
+differenceArr.sort((a, b) => a - b);
+let sum = 0;
+for (let i = 0; i < n - k; i++) {
+  sum += differenceArr[i];
+}
+console.log(sum);
