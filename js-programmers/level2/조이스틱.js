@@ -1,3 +1,4 @@
+// 그리디
 function solution(name) {
   var answer = 0;
 
