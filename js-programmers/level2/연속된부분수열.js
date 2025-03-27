@@ -1,3 +1,4 @@
+//투포인커
 function solution(sequence, k) {
   var answer = [];
   let start = 0;
