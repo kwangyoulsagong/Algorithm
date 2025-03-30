@@ -2,19 +2,24 @@ const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
 const [n] = input.shift().split(" ").map(Number);
-
 const findTheVPS = (arr) => {
-  let balance = 0;
+  let flag = "NO";
+  let left = 0;
+  let right = 0;
   for (const value of arr) {
-    if (value === "(") balance++;
+    if (value === "(") left++;
     else {
-      if (balance === 0) return "NO"; // 닫는 괄호가 더 많아지는 순간 NO
-      balance--;
+      right++;
+      if (left < right) {
+        return "NO";
+      }
     }
   }
-  return balance === 0 ? "YES" : "NO"; // 모든 괄호가 짝이 맞으면 YES
+  if (left === right) flag = "YES";
+  return flag;
 };
-
 for (let i = 0; i < n; i++) {
-  console.log(findTheVPS(input[i].split("")));
+  const arr = input[i].split("").map(String);
+  const result = findTheVPS(arr);
+  console.log(result);
 }
