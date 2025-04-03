@@ -1,15 +1,17 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-const [n, k] = input.shift().split(" ").map(Number);
-let upper = 1;
-let lower = 1;
-for (let i = n; i > n - k; i--) {
-  upper *= i;
-}
+const [n] = input.shift().split(" ").map(Number);
+const arr = input.shift().split(" ").map(Number);
+const [t, p] = input[0].split(" ").map(Number);
 
-for (let i = 1; i <= k; i++) {
-  lower *= i;
-}
+let sum = 0;
 
-console.log(Math.floor(upper / lower));
+for (const value of arr) {
+  let tmp = 0;
+  if (value % t === 0) tmp = Math.floor(value / t);
+  else tmp = Math.floor(value / t + 1);
+  sum += tmp;
+}
+console.log(sum);
+console.log(Math.floor(n / p), Math.floor(n % p));
