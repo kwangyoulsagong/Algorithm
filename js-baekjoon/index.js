@@ -2,29 +2,18 @@ const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
 let [n] = input.shift().split(" ").map(Number);
-let [k] = input.shift().split(" ").map(Number);
-const arr = input.map((v) => v.split(" ").map(Number));
-const graph = Array.from({ length: n + 1 }, () => []);
-
-for (const [a, b] of arr) {
-  graph[a].push(b);
-  graph[b].push(a);
-}
-const expanded = Array(n + 1).fill(false);
-let count = 0;
-const bfs = (viruses) => {
-  const queue = [viruses];
-
-  while (queue.length > 0) {
-    const target = queue.shift();
-    if (!expanded[target]) {
-      expanded[target] = true;
-      count++;
-      queue.push(...graph[target]);
-    }
+const count123Addition = (value) => {
+  const dp = Array(value + 1).fill(0);
+  dp[1] = 1;
+  dp[2] = 2;
+  dp[3] = 4;
+  for (let i = 4; i < value + 1; i++) {
+    dp[i] = dp[i - 3] + dp[i - 2] + dp[i - 1];
   }
+  return dp[value];
 };
-
-bfs(1);
-
-console.log(count - 1);
+for (let i = 0; i < n; i++) {
+  const [value] = input[i].split(" ").map(Number);
+  const result = count123Addition(value);
+  console.log(result);
+}
