@@ -1,19 +1,14 @@
 const fs = require("fs");
 const file = process.platform === "linux" ? "/dev/stdin" : "./example.txt";
 const input = fs.readFileSync(file).toString().trim().split("\n");
-let [n, m] = input.shift().split(" ").map(Number);
-const arr = input.shift().split(" ").map(Number);
-for (let i = 1; i < n; i++) {
-  arr[i] += arr[i - 1];
+let [n] = input.shift().split(" ").map(Number);
+const arr = input[0].split(" ").map(Number);
+const newSet = new Set(arr);
+const compressedArr = Array.from(newSet);
+compressedArr.sort((a, b) => a - b);
+let object = {};
+compressedArr.forEach((value, index) => (object[value] = index));
+for (let i = 0; i < arr.length; i++) {
+  arr[i] = object[arr[i]];
 }
-
-const calculatePrefixSum = (start, end) => {
-  if (start - 2 === -1) return arr[end - 1];
-  return arr[end - 1] - arr[start - 2];
-};
-
-for (let i = 0; i < m; i++) {
-  const [start, end] = input[i].split(" ").map(Number);
-  const result = calculatePrefixSum(start, end);
-  console.log(result);
-}
+console.log(arr.join(" "));
